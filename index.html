@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- <script src="https://unpkg.com/three/build/three.js"></script> -->
+    </head>
+    <body>
+        <div id="webgl"></div>
+        <script type="module">
+            import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+
+            import { DRACOLoader } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/DRACOLoader.js';
+            import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+
+            // 场景
+            const scene = new THREE.Scene();
+            // 几何体
+            const geometry = new THREE.BoxGeometry( 100, 100, 100 );
+            // // const material = new THREE.MeshBasicMaterial( { color: 0x00ffff } );
+            const material = new THREE.MeshLambertMaterial( { color: 0x00ffff, transparent: true, opacity: 0.5} );
+            // const mesh = new THREE.Mesh( geometry, material );
+            for (let i = 0;i < 10; i++) {
+                for (let j = 0;j < 10; j++) {
+                    var mesh = new THREE.Mesh( geometry, material );
+                    mesh.position.set(i*200, 0, j*200);
+                    scene.add( mesh );
+                }
+            }
+      
+            //  位置
+            // mesh.position.set(0, 0, 0)
+            //  旋转
+            mesh.rotateY(Math.PI/4);
+            // 环境光
+            const light = new THREE.AmbientLight( 0xffffff, 0.5 ); // soft white light
+            scene.add( light );
+            // 圆点光
+            const pointLight = new THREE.PointLight( 0xffffff, 0.4 );
+            pointLight.position.set( 500, 300, 400 );
+            scene.add( pointLight );
+            // 坐标轴
+            const axesHelper = new THREE.AxesHelper( 200 );
+            scene.add( axesHelper );
+            // 可视化光源
+            const pointLightHelper = new THREE.PointLightHelper( pointLight, 10 );
+            scene.add( pointLightHelper );
+            // 相机
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            // const width = 800;
+            // const height = 500;
+            const camera = new THREE.PerspectiveCamera(45, width/height, 1, 4000)
+            camera.position.set(2000,2000,2000)
+            camera.lookAt(1000, 0, 1000)
+            // 渲染器
+            const renderer = new THREE.WebGLRenderer()
+            renderer.setSize(width, height)
+            renderer.render(scene, camera)
+            
+            document.body.appendChild(renderer.domElement)
+            // document.getElementById("webgl").appendChild(renderer.domElement)
+            // 相机控制
+            const controls = new OrbitControls( camera, renderer.domElement );
+            controls.target.set(1000,0,1000)
+            controls.update()
+            // console.log("===", controls)
+            // controls.addEventListener('change', function(){
+            //     renderer.render(scene, camera)
+            //     console.log("===")
+            // })
+            const clock = new THREE.Clock();
+            !(function animate(){
+                const spt = clock.getDelta()*1000;
+                console.log("渲染时间间隔 单位毫秒", spt)
+                console.log("渲染帧率FPS", 1000/spt)
+                mesh.rotateY(0.01)
+                renderer.render(scene, camera)
+                requestAnimationFrame(animate)
+            })()
+        </script>
+    </body>
+</html>

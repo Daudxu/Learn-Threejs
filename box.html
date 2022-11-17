@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/three/build/three.js"></script>
+    </head>
+    <body>
+        <script>
+            // 场景
+            const scene = new THREE.Scene();
+            // 相机
+            const camera = new THREE.PerspectiveCamera(
+                100,
+                window.innerWidth/window.innerHeight,
+                0.1,
+                1000
+            )
+            // 渲染器
+            const renderer = new THREE.WebGLRenderer()
+            renderer.setSize(window.innerWidth, window.innerHeight)
+            document.body.appendChild(renderer.domElement)
+            // 几何体
+            const geometry = new THREE.BoxGeometry() 
+            // 材质
+            const material = new THREE.MeshNormalMaterial()
+            // 网格
+            const cube = new THREE.Mesh( geometry, material );
+            scene.add(cube)
+            camera.position.z = 5
+         
+
+            document.addEventListener('mousewheel', mousewheel, false);
+            var fov = 0.1
+            var near = 0.1
+            function mousewheel(e) {
+                
+            console.log('e.wheelDelta', e.wheelDelta)
+            if (e.wheelDelta) {  //判断浏览器IE，谷歌滑轮事件
+                if (e.wheelDelta > 0) { //当滑轮向上滚动时
+                    fov = fov + near;
+                    cube.rotation.x += near
+                    cube.rotation.y += near
+                }else{
+                    fov = fov - near;
+                    cube.rotation.x -= near
+                    cube.rotation.y -= near
+                }
+            }
+            console.log('fov', fov)
+
+            cube.scale.set(fov, fov, fov)
+   
+            renderer.render(scene, camera)
+        }
+
+        !(function animate(){
+                cube.rotation.x += 0.01
+                cube.rotation.y += 0.01
+                cube.rotation.z += 0.01
+                renderer.render(scene, camera)
+                requestAnimationFrame(animate)
+            })()
+        // mousewheel()
+        </script>
+    </body>
+</html>
