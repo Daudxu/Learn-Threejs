@@ -60,6 +60,7 @@
             // document.getElementById("webgl").appendChild(renderer.domElement)
             // 相机控制
             const controls = new OrbitControls( camera, renderer.domElement );
+            controls.autoRotate = true
             controls.target.set(1000,0,1000)
             controls.update()
             // console.log("===", controls)
