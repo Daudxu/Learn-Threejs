@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import gsap from 'gsap'
+
 // 创建场景
 const scene = new THREE.Scene();
 
@@ -38,14 +38,12 @@ new OrbitControls( camera, renderer.domElement );
 document.body.appendChild(renderer.domElement)
 
 const clock = new THREE.Clock();
-gsap.to(cube.position, {x:  5, duration: 5})
-gsap.to(cube.rotation, {x:  2 * Math.PI, duration: 5})
 function render() {
-    // let time = clock.getElapsedTime();
-    // let deltaTime = clock.getDelta();
-    // console.log("两次获取时间的间隔时间:", deltaTime )
-    // let t = time % 5
-    // cube.position.x = t * 1;
+    let time = clock.getElapsedTime();
+    let deltaTime = clock.getDelta();
+    console.log("两次获取时间的间隔时间:", deltaTime )
+    let t = time % 5
+    cube.position.x = t * 1;
     // if(cube.position.x > 5) {
     //     cube.position.x = 0;
     // }
