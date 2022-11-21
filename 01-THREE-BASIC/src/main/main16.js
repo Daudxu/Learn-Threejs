@@ -13,32 +13,26 @@ camera.position.set(0, 0, 10)
 scene.add(camera)
 // 导入纹理
 const textureLoader = new THREE.TextureLoader()
-const doorclorTexture = textureLoader.load("./cake.png")
-const doorAplhaTexture = textureLoader.load("./alpha.png")
-// 纹理显示设置
-// doorclorTexture.minFilter = THREE.NearestFilter;
-// doorclorTexture.magFilter = THREE.NearestFilter;
-doorclorTexture.minFilter = THREE.LinearFilter;
-doorclorTexture.magFilter = THREE.LinearFilter;
+const doorclorTexture = textureLoader.load("./door.png")
+// 设置偏移移
+// doorclorTexture.offset.x = 0.5
+// doorclorTexture.offset.Y = 0.5
+// doorclorTexture.offset.set(0.5, 0.5)
+// 设置旋转原点
+// doorclorTexture.center.set(0.5, 0.5)
+// 旋转
+// doorclorTexture.rotation = Math.PI / 4
+doorclorTexture.repeat.set(2,3)
+// 设置纹理重复的模式
+doorclorTexture.wrapS = THREE.MirroredRepeatWrapping;
+doorclorTexture.wrapT = THREE.RepeatWrapping;
+
 // 创建物体
 const cubeGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({
     color: "#ffff00" ,
-    map: doorclorTexture,
-    alphaMap: doorAplhaTexture,
-    transparent: true,
-    opacity: 0.9,
-    side: THREE.DoubleSide,
+    map: doorclorTexture
 })
-
-// 添加平面
-// const plane = new THREE.Mesh(
-//     new THREE.BoxBufferGeometry(1, 1),
-//     basicMaterial
-// )
-
-// plane.position.set(3,0,0)
-// scene.add(plane)
 
 const mesh = new THREE.Mesh( cubeGeometry, material );
 scene.add(mesh)

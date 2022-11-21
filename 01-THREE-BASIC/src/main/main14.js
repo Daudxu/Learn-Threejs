@@ -11,37 +11,25 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 // 设置相机位置
 camera.position.set(0, 0, 10)
 scene.add(camera)
-// 导入纹理
-const textureLoader = new THREE.TextureLoader()
-const doorclorTexture = textureLoader.load("./cake.png")
-const doorAplhaTexture = textureLoader.load("./alpha.png")
-// 纹理显示设置
-// doorclorTexture.minFilter = THREE.NearestFilter;
-// doorclorTexture.magFilter = THREE.NearestFilter;
-doorclorTexture.minFilter = THREE.LinearFilter;
-doorclorTexture.magFilter = THREE.LinearFilter;
 // 创建物体
-const cubeGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({
-    color: "#ffff00" ,
-    map: doorclorTexture,
-    alphaMap: doorAplhaTexture,
-    transparent: true,
-    opacity: 0.9,
-    side: THREE.DoubleSide,
-})
+// 创建几何体
+for(let i=0;i<50;i++) {
+     // 每个三角形需要三个顶点，每个顶点需要三个值
+     const geometry = new THREE.BufferGeometry();
+     const positionArray = new Float32Array(9) ;
+    for(let j=0; j<9; j++) {
+        positionArray[j] = Math.random() * 10 - 5;
+    }
+    geometry.setAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
+    let color = new THREE.Color(Math.random(),Math.random(),Math.random())
+    const material = new THREE.MeshBasicMaterial( { color: color,transparent: true,opacity:0.7 } );
+    const mesh = new THREE.Mesh( geometry, material );
+    scene.add(mesh)
+}
 
-// 添加平面
-// const plane = new THREE.Mesh(
-//     new THREE.BoxBufferGeometry(1, 1),
-//     basicMaterial
-// )
 
-// plane.position.set(3,0,0)
-// scene.add(plane)
 
-const mesh = new THREE.Mesh( cubeGeometry, material );
-scene.add(mesh)
+
 
 
 // 坐标轴的对象

@@ -13,32 +13,13 @@ camera.position.set(0, 0, 10)
 scene.add(camera)
 // 导入纹理
 const textureLoader = new THREE.TextureLoader()
-const doorclorTexture = textureLoader.load("./cake.png")
-const doorAplhaTexture = textureLoader.load("./alpha.png")
-// 纹理显示设置
-// doorclorTexture.minFilter = THREE.NearestFilter;
-// doorclorTexture.magFilter = THREE.NearestFilter;
-doorclorTexture.minFilter = THREE.LinearFilter;
-doorclorTexture.magFilter = THREE.LinearFilter;
+const doorclorTexture = textureLoader.load("./door.png")
 // 创建物体
 const cubeGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({
     color: "#ffff00" ,
-    map: doorclorTexture,
-    alphaMap: doorAplhaTexture,
-    transparent: true,
-    opacity: 0.9,
-    side: THREE.DoubleSide,
+    map: doorclorTexture
 })
-
-// 添加平面
-// const plane = new THREE.Mesh(
-//     new THREE.BoxBufferGeometry(1, 1),
-//     basicMaterial
-// )
-
-// plane.position.set(3,0,0)
-// scene.add(plane)
 
 const mesh = new THREE.Mesh( cubeGeometry, material );
 scene.add(mesh)

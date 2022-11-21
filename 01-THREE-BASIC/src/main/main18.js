@@ -27,7 +27,7 @@ const material = new THREE.MeshBasicMaterial({
     map: doorclorTexture,
     alphaMap: doorAplhaTexture,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.3,
     side: THREE.DoubleSide,
 })
 
