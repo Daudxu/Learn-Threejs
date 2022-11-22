@@ -16,6 +16,14 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 camera.position.set(0, 0, 10)
 scene.add(camera)
 
+// // 加载HDR环境图
+// const rgbLoaderssa = new RGBELoader();
+// rgbLoaderssa.loadAsync("test.hdr").then((texture)=>{
+//     texture.mapping = THREE.EquirectangularReflectionMapping;
+//     scene.background = texture
+//     scene.environment = texture
+// })
+
 // 创建球形
 const sphereGeometry = new THREE.SphereBufferGeometry( 1, 20, 20 );
 const material = new THREE.MeshStandardMaterial();
@@ -24,7 +32,7 @@ sphere.castShadow = true
 scene.add( sphere );
 
 // 创建平面
-const planeBufferGeometry = new THREE.PlaneBufferGeometry(50, 50 );
+const planeBufferGeometry = new THREE.PlaneBufferGeometry(20, 20 );
 const plane = new THREE.Mesh( planeBufferGeometry, material );
 plane.position.set(0, -1, 0);
 plane.rotation.x = - Math.PI / 2;
@@ -35,40 +43,35 @@ scene.add( plane );
 // 环境光
 const light = new THREE.AmbientLight( 0xffffff, 0.5 ); 
 scene.add( light );
-// 点光源
-const pointLight = new THREE.PointLight( 0xff0000, 1 );
-pointLight.position.set(2, 2, 2)
-pointLight.castShadow = true
-// pointLight.angle = Math.PI / 6
+// 直线光源
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+directionalLight.position.set(5, 5, 5)
+directionalLight.castShadow = true
+
 // 阴影模糊度
-pointLight.shadow.radius = 20;
+directionalLight.shadow.radius = 20;
 
 // 设置阴影贴图的分辨率
-pointLight.shadow.mapSize.set(4096, 4096)
-// spotLight.target = sphere
-// spotLight.distance = 0
-// spotLight.penumbra = 0
-// spotLight.decay = 0
-// spotLight.intensity = 2
+directionalLight.shadow.mapSize.set(4096, 4096)
 
+// 设置平行光投射下相机的属性
+directionalLight.shadow.camera.near = 9.5;
+directionalLight.shadow.camera.far = 500;
+directionalLight.shadow.camera.top = 5;
+directionalLight.shadow.camera.bottom = -5;
+directionalLight.shadow.camera.left = -5;
+directionalLight.shadow.camera.right = 5;
 
-scene.add( pointLight );
+scene.add( directionalLight );
 
 gui
-.add(sphere.position, "x")
-.min(-5)
-.max(5)
-.step(0.1)
-gui
-.add(pointLight, "distance")
+.add(directionalLight.shadow.camera, "near")
 .min(0)
 .max(10)
-.step(0.01)
-gui
-.add(pointLight, "decay")
-.min(0)
-.max(5)
-.step(0.01)
+.step(0.1)
+.onChange(()=>{
+        directionalLight.shadow.camera.updateProjectionMatrix()
+})
 
 // 坐标轴的对象
 const axesHelper = new THREE.AxesHelper( 5 );
@@ -77,7 +80,6 @@ scene.add( axesHelper );
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(width, height)
 renderer.shadowMap.enabled = true
-// renderer.physicallyCorrectLights = true
 document.body.appendChild(renderer.domElement)
 // 控制
 const controls =  new OrbitControls( camera, renderer.domElement );
