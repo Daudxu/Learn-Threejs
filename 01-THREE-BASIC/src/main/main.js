@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import gsap from 'gsap'
 // import  *  as dat from "dat.gui"
 // 创建场景
@@ -11,39 +12,45 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 // 设置相机位置
 camera.position.set(0, 0, 10)
 scene.add(camera)
-// 导入纹理
-const textureLoader = new THREE.TextureLoader()
-const doorclorTexture = textureLoader.load("./cake.png")
-const doorAplhaTexture = textureLoader.load("./alpha.png")
-// 纹理显示设置
-// doorclorTexture.minFilter = THREE.NearestFilter;
-// doorclorTexture.magFilter = THREE.NearestFilter;
-doorclorTexture.minFilter = THREE.LinearFilter;
-doorclorTexture.magFilter = THREE.LinearFilter;
-// 创建物体
-const cubeGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({
-    color: "#ffff00" ,
-    map: doorclorTexture,
-    alphaMap: doorAplhaTexture,
-    transparent: true,
-    opacity: 0.9,
-    side: THREE.DoubleSide,
+
+// 加载HDR环境图
+const rgbLoaderssa = new RGBELoader();
+rgbLoaderssa.loadAsync("test.hdr").then((texture)=>{
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture
+    scene.environment = texture
 })
 
-// 添加平面
-// const plane = new THREE.Mesh(
-//     new THREE.BoxBufferGeometry(1, 1),
-//     basicMaterial
-// )
+// const cubeTextureLoader = new THREE.CubeTextureLoader()
+// const envMapTexture = cubeTextureLoader.load([
+//     'px.jpg',
+//     'nx.jpg',
+//     'py.jpg',
+//     'ny.jpg',
+//     'pz.jpg',
+//     'nz.jpg'
+// ]);
 
-// plane.position.set(3,0,0)
-// scene.add(plane)
+const sphereGeometry = new THREE.SphereBufferGeometry( 1, 20, 20 );
+const material = new THREE.MeshStandardMaterial({ 
+    metalness: 0.7,
+    roughness: 0.01,
+    // envMap: envMapTexture
+});
+const sphere = new THREE.Mesh( sphereGeometry, material );
+scene.add( sphere );
 
-const mesh = new THREE.Mesh( cubeGeometry, material );
-scene.add(mesh)
+// 给场景贴图
+// scene.background = envMapTexture
+// scene.environment = envMapTexture
 
-
+// 环境光
+const light = new THREE.AmbientLight( 0xffffff, 0.5 ); 
+scene.add( light );
+// 点光源
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+directionalLight.position.set(10, 10, 10)
+scene.add( directionalLight );
 // 坐标轴的对象
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
