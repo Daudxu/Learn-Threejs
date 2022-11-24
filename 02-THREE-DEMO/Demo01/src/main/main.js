@@ -94,7 +94,7 @@ function init() {
     const controls =  new OrbitControls( camera, renderer.domElement );
     const controls1 =  new OrbitControls( camera, labelRenderer.domElement );
     controls.enableDamping = true;
-}   
+} 
 var oldTime = 0;
 function animate() {
     const elapsed = clock.getElapsedTime();
