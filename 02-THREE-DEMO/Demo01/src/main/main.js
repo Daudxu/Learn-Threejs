@@ -75,18 +75,22 @@ function init() {
     const eartchLabel = new CSS2DObject(earthDiv)
     eartchLabel.position.set(0, EARTH_RADIUS + 0.5, 0)
     earth.add(eartchLabel)
+
     // 渲染器
     renderer = new THREE.WebGL1Renderer()
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
+
     // 标签渲染器
     labelRenderer = new CSS2DRenderer()
     labelRenderer.setSize(window.innerWidth, window.innerHeight)
     labelRenderer.domElement.style.position = "absolute"
     labelRenderer.domElement.style.top = "0px"
     document.body.appendChild(labelRenderer.domElement)
+
     // 开启渲染阴影
     renderer.shadowMap.enabled = true
+
     // 挂载画布对象
     document.body.appendChild(renderer.domElement)
 
@@ -99,9 +103,11 @@ var oldTime = 0;
 function animate() {
     const elapsed = clock.getElapsedTime();
     moon.position.set(Math.sin(elapsed) * 5, 0, Math.cos(elapsed) * 5)
+
     // 地球自转
     var axis = new THREE.Vector3(0, 1, 0);
     earth.rotateOnAxis(axis, (elapsed - oldTime) * Math.PI / 10)
+    
     // moon.rotateOnAxis(axis, elapsed * Math.PI / 2000)
     renderer.render(scene, camera)
     labelRenderer.render(scene, camera)
