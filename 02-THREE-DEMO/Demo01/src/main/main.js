@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Color, DirectionalLight, Plane, Texture } from 'three';
+// import { Color, DirectionalLight, Plane, Texture } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
