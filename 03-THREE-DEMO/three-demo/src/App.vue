@@ -3,6 +3,17 @@
 <template>
   <div class="content">
         <div class="domCanvas" ref="domCanvas"></div>
+        <div class="home-content">
+          <div class="home-content-title">
+              <h1>定制控制器</h1>
+          </div>
+          <h2>颜色</h2>
+          <div class="select">
+              <div class="select-item" v-for="(item, index) in colors" :key="index" @click="selectColor(index)">
+                <div class="select-item-color" :style="{backgroundColor: item}"></div>
+              </div>
+          </div>
+        </div>
   </div>
 </template>
 <script setup>
@@ -22,11 +33,24 @@ let scene, camera, renderer, geometry, material, mesh, controls, clock;
 const width = window.innerWidth
 const height = window.innerHeight
 
+const colors = [
+  "red",
+  "blue",
+  "green",
+  "gray",
+  "orange",
+  "purple",
+]
+
+const selectColor = (index)=>{
+    bodyMaterial.color.set(colors[index])
+}
+
 let wheels = []
 let carBody, frontCar, hoodCar, glassCar
 
 const bodyMaterial = new THREE.MeshPhysicalMaterial({
-   color: 0xff0000,
+   color: 0x008000,
    metalness: 1,
    roughness: 0.5,
    clearcoat: 1,
@@ -65,7 +89,7 @@ onMounted(()=>{
   const dracoloder = new DRACOLoader();
   dracoloder.setDecoderPath("./draco/glft")
   loader.setDRACOLoader(dracoloder);
-  loader.load("./car.gltf", (glft)=> {
+  loader.load("./ferrari_f50_1995.glb", (glft)=> {
     const m = glft.scene;
     m.position.set(0,0,0);
     m.traverse((child) => {
@@ -73,33 +97,32 @@ onMounted(()=>{
           console.log("m", child.name)
        }
 
-       if(child.isMesh && child.name.includes("1003_14")) {
+       if(child.isMesh && child.name.includes("Object_4")) {
           wheels.push(child)
        }
        // 车身
-       if(child.isMesh && child.name.includes("1003_8")) {
+       if(child.isMesh && child.name.includes("Object_70")) {
           carBody = child
           carBody.material = bodyMaterial;
        }
-       if(child.isMesh && child.name.includes("1003_7")) {
+       // 轮毂
+       if(child.isMesh && child.name.includes("Object_41")) {
           carBody = child
-          carBody.material = bodyMaterial;
+          // carBody.material = bodyMaterial;
        }
-       if(child.isMesh && child.name.includes("1003_6")) {
+       // 刹车卡钳
+       if(child.isMesh && child.name.includes("Object_45")) {
           carBody = child
-          carBody.material = bodyMaterial;
        }
-       if(child.isMesh && child.name.includes("1003_5")) {
+       // 引擎盖子
+       if(child.isMesh && child.name.includes("Object_15")) {
           carBody = child
-          carBody.material = bodyMaterial;
+          // carBody.material = bodyMaterial;
        }
-       if(child.isMesh && child.name.includes("1003_4")) {
+       // 引擎盖子内部
+       if(child.isMesh && child.name.includes("Object_17")) {
           carBody = child
-          carBody.material = bodyMaterial;
-       }
-       if(child.isMesh && child.name.includes("1003_3")) {
-          carBody = child
-          carBody.material = bodyMaterial;
+          // carBody.material = bodyMaterial;
        }
        // 
       //  if(child.isMesh && child.name.includes("1003_1")) {
@@ -110,7 +133,7 @@ onMounted(()=>{
           hoodCar = child
        }
        // 挡风玻璃
-       if(child.isMesh && child.name.includes("1003_10")) {
+       if(child.isMesh && child.name.includes("Object_51")) {
           glassCar = child
        }
     })
@@ -128,24 +151,24 @@ onMounted(()=>{
   const light3 = new THREE.DirectionalLight(0xffffff, 1);
   light3.position.set(10,0,0);
   scene.add(light3)
-  const light4 = new THREE.DirectionalLight(0xffffff, 0.3);
+  const light4 = new THREE.DirectionalLight(0xffffff, 1);
   light4.position.set(-10,0,0);
   scene.add(light4)
-  const light5 = new THREE.DirectionalLight(0xffffff, 0.3);
+  const light5 = new THREE.DirectionalLight(0xffffff, 1);
   light5.position.set(0,10,0);
   scene.add(light5)
-  // const light6 = new THREE.DirectionalLight(0xffffff, 0.3);
-  // light6.position.set(5,10,0);
-  // scene.add(light6)
-  // const light7 = new THREE.DirectionalLight(0xffffff, 0.3);
-  // light7.position.set(0,10,5);
-  // scene.add(light7)
-  // const light8 = new THREE.DirectionalLight(0xffffff, 0.3);
-  // light8.position.set(0,10,-5);
-  // scene.add(light8)
-  // const light9 = new THREE.DirectionalLight(0xffffff, 0.3);
-  // light9.position.set(-5,10,0);
-  // scene.add(light9)
+  const light6 = new THREE.DirectionalLight(0xffffff, 0.3);
+  light6.position.set(5,10,0);
+  scene.add(light6)
+  const light7 = new THREE.DirectionalLight(0xffffff, 0.3);
+  light7.position.set(0,10,5);
+  scene.add(light7)
+  const light8 = new THREE.DirectionalLight(0xffffff, 0.3);
+  light8.position.set(0,10,-5);
+  scene.add(light8)
+  const light9 = new THREE.DirectionalLight(0xffffff, 0.3);
+  light9.position.set(-5,10,0);
+  scene.add(light9)
 
   // 轨道控制
   controls = new OrbitControls(camera, renderer.domElement);
@@ -171,6 +194,10 @@ onMounted(()=>{
   // })
 
   animat();
+  return {
+    colors,
+    selectColor
+  }
 })
 
 const animat = () => {
@@ -179,5 +206,23 @@ const animat = () => {
 }
 </script>
 <style scoped>
+.home-content {
+   position: fixed;
+   top:0;
+   right: 20px;
+}
 
+.select-item-color {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #fff;
+  margin: 10px;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+}
+.select {
+   display: flex;
+}
 </style>
