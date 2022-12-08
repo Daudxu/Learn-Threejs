@@ -101,7 +101,7 @@ onMounted(()=>{
           wheels.push(child)
        }
        // 车身
-       if(child.isMesh && child.name.includes("Object_70")) {
+       if(child.isMesh && child.name.includes("Object_41")) {
           carBody = child
           carBody.material = bodyMaterial;
        }
