@@ -59,7 +59,7 @@ const roughness = [
 ]
 
 const selectColor = (index)=>{
-    bodyMaterial.color.set(colors[index])
+  bodyMaterial.color.set(colors[index])
 }
 
 const selectFootColor = (index)=>{
@@ -82,7 +82,7 @@ const bodyMaterial = new THREE.MeshPhysicalMaterial({
 })
 
 const wheelsMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0x008000,
+   color: 0x008000,
    metalness: 1,
    roughness: 0.1,
 })
@@ -99,7 +99,7 @@ onMounted(()=>{
   // 场景
   scene = new THREE.Scene();
   // 相机
-  camera = new THREE.PerspectiveCamera(38, width/height, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(60, width/height, 0.1, 1000);
   camera.position.set(0, 5, 6);
   // 渲染
   renderer = new THREE.WebGL1Renderer({
@@ -128,8 +128,8 @@ onMounted(()=>{
     m.rotation.y = Math.PI / 1.6
     gsap.to(m.rotation, {
       y: 10, 
-      duration: 15, 
-      ease: 'power1.inOut',
+      duration: 10, // 需要的时间，5秒
+      ease: 'power1.inOut', // 动画执行方式
       repeat:-1,
       yoyo: true, 
     })
@@ -140,18 +140,18 @@ onMounted(()=>{
        }
        // 车身
        if(child.isMesh && child.name.includes("Object_4")) {
-          carBody = child
+           carBody = child
        }
        // 轮毂
        if(child.isMesh && child.name.includes("Object_49")) {
-          frontCar = child
-          frontCar.material = wheelsMaterial;
+           frontCar = child
+           frontCar.material = wheelsMaterial;
        }
        // 挡风玻璃
        if(child.isMesh && child.name.includes("Object_28")) {
-          glassCar = child
-          carBody.material = bodyMaterial;
-          glassCar.material = glassMaterial;
+           glassCar = child
+           carBody.material = bodyMaterial;
+           glassCar.material = glassMaterial;
        }
     })
 
