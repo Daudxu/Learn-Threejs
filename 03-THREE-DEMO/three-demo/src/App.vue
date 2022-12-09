@@ -5,12 +5,24 @@
         <div class="domCanvas" ref="domCanvas"></div>
         <div class="home-content">
           <div class="home-content-title">
-              <h1>定制控制器</h1>
+              <h1>车辆可定制选择</h1>
           </div>
-          <h2>颜色</h2>
+          <h2>车身颜色</h2>
           <div class="select">
               <div class="select-item" v-for="(item, index) in colors" :key="index" @click="selectColor(index)">
                 <div class="select-item-color" :style="{backgroundColor: item}"></div>
+              </div>
+          </div>
+          <h2>轮毂地盘颜色</h2>
+          <div class="select">
+              <div class="select-item" v-for="(item, index) in colors" :key="index" @click="selectFootColor(index)">
+                <div class="select-item-color" :style="{backgroundColor: item}"></div>
+              </div>
+          </div>
+          <h2>车身材质</h2>
+          <div class="select">
+              <div class="select-item" v-for="(item, index) in roughness" :key="index" @click="selectRoughness(item.value)">
+                <div class="select-item-color" >{{item.name}}</div>
               </div>
           </div>
         </div>
@@ -21,7 +33,7 @@ import * as THREE from "three";
 import { OrbitControls }  from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader }  from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader }  from "three/examples/jsm/loaders/DRACOLoader"; 
-// import gsap from "gsap";
+import gsap from "gsap";
 // import * as dat from 'dat.gui'
 
 import { onMounted, ref } from "vue";
@@ -41,9 +53,21 @@ const colors = [
   "orange",
   "purple",
 ]
+const roughness = [
+   {'name': "光滑", 'value': 0.5},
+   {'name': "磨砂", 'value': 1}
+]
 
 const selectColor = (index)=>{
     bodyMaterial.color.set(colors[index])
+}
+
+const selectFootColor = (index)=>{
+  wheelsMaterial.color.set(colors[index])
+}
+
+const selectRoughness = (value)=>{
+  bodyMaterial.roughness = value
 }
 
 let wheels = []
@@ -57,12 +81,26 @@ const bodyMaterial = new THREE.MeshPhysicalMaterial({
    clearcoatRoughness: 0
 })
 
+const wheelsMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0x008000,
+   metalness: 1,
+   roughness: 0.1,
+})
+
+const glassMaterial = new THREE.MeshPhysicalMaterial({
+   color: 0xffffff,
+   metalness: 0,
+   roughness: 0,
+   transmission: 1,
+   transparent: true
+})
+
 onMounted(()=>{
   // 场景
   scene = new THREE.Scene();
   // 相机
-  camera = new THREE.PerspectiveCamera(60, width/height, 0.1, 1000);
-  camera.position.set(0, 2, 6);
+  camera = new THREE.PerspectiveCamera(38, width/height, 0.1, 1000);
+  camera.position.set(0, 5, 6);
   // 渲染
   renderer = new THREE.WebGL1Renderer({
     antialias: true
@@ -72,11 +110,6 @@ onMounted(()=>{
   scene.background = new THREE.Color("#ccc")
   scene.environment = new THREE.Color("#ccc")
   domCanvas.value.appendChild(renderer.domElement );
-  // 几何体
-  // geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-  // material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-  // mesh = new THREE.Mesh( geometry, material );
-  // scene.add( mesh );
 
   // 添加网格
   const gridHelper = new THREE.GridHelper(20, 20)
@@ -89,52 +122,36 @@ onMounted(()=>{
   const dracoloder = new DRACOLoader();
   dracoloder.setDecoderPath("./draco/glft")
   loader.setDRACOLoader(dracoloder);
-  loader.load("./ferrari_f50_1995.glb", (glft)=> {
+  loader.load("./free_koenigsegg_gemera.glb", (glft)=> {
     const m = glft.scene;
     m.position.set(0,0,0);
+    m.rotation.y = Math.PI / 1.6
+    gsap.to(m.rotation, {
+      y: 10, 
+      duration: 15, 
+      ease: 'power1.inOut',
+      repeat:-1,
+      yoyo: true, 
+    })
+
     m.traverse((child) => {
        if(child.isMesh) {
           console.log("m", child.name)
        }
-
-       if(child.isMesh && child.name.includes("Object_4")) {
-          wheels.push(child)
-       }
        // 车身
-       if(child.isMesh && child.name.includes("Object_70")) {
+       if(child.isMesh && child.name.includes("Object_4")) {
           carBody = child
-          carBody.material = bodyMaterial;
        }
        // 轮毂
-       if(child.isMesh && child.name.includes("Object_41")) {
-          carBody = child
-          // carBody.material = bodyMaterial;
-       }
-       // 刹车卡钳
-       if(child.isMesh && child.name.includes("Object_45")) {
-          carBody = child
-       }
-       // 引擎盖子
-       if(child.isMesh && child.name.includes("Object_15")) {
-          carBody = child
-          // carBody.material = bodyMaterial;
-       }
-       // 引擎盖子内部
-       if(child.isMesh && child.name.includes("Object_17")) {
-          carBody = child
-          // carBody.material = bodyMaterial;
-       }
-       // 
-      //  if(child.isMesh && child.name.includes("1003_1")) {
-      //     frontCar = child
-      //  }
-       // 引擎盖
-       if(child.isMesh && child.name.includes("1003_2")) {
-          hoodCar = child
+       if(child.isMesh && child.name.includes("Object_49")) {
+          frontCar = child
+          frontCar.material = wheelsMaterial;
        }
        // 挡风玻璃
-       if(child.isMesh && child.name.includes("Object_51")) {
+       if(child.isMesh && child.name.includes("Object_28")) {
           glassCar = child
+          carBody.material = bodyMaterial;
+          glassCar.material = glassMaterial;
        }
     })
 
@@ -196,7 +213,10 @@ onMounted(()=>{
   animat();
   return {
     colors,
-    selectColor
+    roughness,
+    selectColor,
+    selectFootColor,
+    selectRoughness
   }
 })
 
@@ -210,6 +230,10 @@ const animat = () => {
    position: fixed;
    top:0;
    right: 20px;
+   padding: 20px;
+}
+.home-content .home-content-title {
+   text-align: center;
 }
 
 .select-item-color {
@@ -221,6 +245,8 @@ const animat = () => {
   cursor: pointer;
   border-radius: 10px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .select {
    display: flex;
