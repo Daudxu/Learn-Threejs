@@ -28,11 +28,32 @@ onMounted(()=>{
   camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
   camera.position.set(0, 0, 10);
   scene.add(camera)
+
+  const particlesGeometry = new THREE.BufferGeometry();
+  const count = 5000;
+  // 设置缓冲区数组
+  const positions = new Float32Array(count * 3);
+  // 设置顶点颜色
+  const colors = new Float32Array(count * 3)
+  // 设置顶点
+  for(let i = 0; i < count * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 30;
+      colors[i] = Math.random();
+  }
+
+  particlesGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions, 3)
+  )
+  particlesGeometry.setAttribute(
+    "color",
+    new THREE.BufferAttribute(colors, 3)
+  )
   // 坐标轴
   const axesHelper = new THREE.AxesHelper( 7 );
   scene.add( axesHelper );
   // 创建球形几何体
-  const sphereGeometry = new THREE.SphereBufferGeometry(3, 20, 20);
+  // const sphereGeometry = new THREE.SphereBufferGeometry(3, 20, 20);
   // const material = new THREE.MeshBasicMaterial({
   //   color: 0xff0000,
   //   wireframe: true
@@ -42,22 +63,23 @@ onMounted(()=>{
   // scene.add(mesh)
   // 设置材质
   const pointsMaterial = new THREE.PointsMaterial();
-  pointsMaterial.size = 0.1;
+  pointsMaterial.size = 0.5;
   pointsMaterial.color.set(0xfff000)
   // 相机深度不衰减
   pointsMaterial.sizeAttenuation = true
   
   // 载入纹理
   const textureLoader = new THREE.TextureLoader();
-  const textures = textureLoader.load("./textures/particles/2.png");
+  const textures = textureLoader.load("./textures/particles/8.png");
   // 设置点材质和纹理
   pointsMaterial.map = textures;
   pointsMaterial.alphaMap = textures;
   pointsMaterial.transparent = true;
   pointsMaterial.depthWrite = false;
   pointsMaterial.blending = THREE.AdditiveBlending;
+  pointsMaterial.vertexColors = true
 
-  const points = new THREE.Points(sphereGeometry, pointsMaterial);
+  const points = new THREE.Points(particlesGeometry, pointsMaterial);
   scene.add(points)
   // 渲染
   renderer = new THREE.WebGL1Renderer({
