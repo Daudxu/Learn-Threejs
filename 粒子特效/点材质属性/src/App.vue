@@ -45,30 +45,41 @@ onMounted(()=>{
   pointsMaterial.size = 0.1;
   pointsMaterial.color.set(0xfff000)
   // 相机深度不衰减
-  pointsMaterial.sizeAttenuation = false
+  pointsMaterial.sizeAttenuation = true
   
-  const points = new THREE.Points(sphereGeometry, pointsMaterial)
+  // 载入纹理
+  const textureLoader = new THREE.TextureLoader();
+  const textures = textureLoader.load("./textures/particles/2.png");
+  // 设置点材质和纹理
+  pointsMaterial.map = textures;
+  pointsMaterial.alphaMap = textures;
+  pointsMaterial.transparent = true;
+  pointsMaterial.depthWrite = false;
+  pointsMaterial.blending = THREE.AdditiveBlending;
+
+  const points = new THREE.Points(sphereGeometry, pointsMaterial);
   scene.add(points)
   // 渲染
   renderer = new THREE.WebGL1Renderer({
     // antialias: true
   });
   renderer.setSize(width, height);
+  renderer.shadowMap.enabled = true;
+  renderer.physicallyCorrectLights - true;
   domCanvas.value.appendChild(renderer.domElement);
 
   // 轨道控制
   controls = new OrbitControls(camera, renderer.domElement);
   controls.update();
-  console.log("===")
-
-
+  // console.log("===")
   clock = new THREE.Clock()
   animat();
 })
 
 const animat = () => {
-  requestAnimationFrame(animat);
+
   renderer.render(scene, camera);
+  requestAnimationFrame(animat);
 }
 </script>
 <style scoped>
