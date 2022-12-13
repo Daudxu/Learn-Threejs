@@ -56,7 +56,7 @@ const generateGalaxy = () => {
        // 当前点距离圆心位置
        const distance = Math.random() * params.radius * Math.pow(Math.random() , 3);
        const current = i * 3;
-
+       
        const randomX = Math.pow(Math.random() * 2 - 1, 3) * (params.radius - distance) / 5
        const randomY = Math.pow(Math.random() * 2 - 1, 3) * (params.radius - distance) / 5
        const randomZ = Math.pow(Math.random() * 2 - 1, 3) * (params.radius - distance) / 5
