@@ -51,6 +51,7 @@ onMounted(()=>{
       }
     }
   }
+  
   // 创建光线投射对象
   const raycaster = new THREE.Raycaster();
   // 鼠标位置对象
