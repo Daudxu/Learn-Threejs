@@ -125,30 +125,3 @@ const animat = () => {
   requestAnimationFrame(animat);
 }
 </script>
-<style scoped>
-.home-content {
-   position: fixed;
-   top:0;
-   right: 20px;
-   padding: 20px;
-}
-.home-content .home-content-title {
-   text-align: center;
-}
-
-.select-item-color {
-  width: 50px;
-  height: 50px;
-  border: 1px solid #fff;
-  margin: 10px;
-  display: inline-block;
-  cursor: pointer;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.select {
-   display: flex;
-}
-</style>
