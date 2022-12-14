@@ -1,11 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Body, Material, Sphere, Vec3, World } from 'cannon-es'
+import { Body, ContactMaterial, Material, Plane, Sphere, Vec3, World } from 'cannon-es'
 
 
 // import gsap from 'gsap'
 // import  *  as dat from "dat.gui"
-
+const hitSound = new Audio("./assets/1.mp3")
+// const hitSound = new Audio("https://audio.bfmtv.com/bfmbusiness_128.mp3?aw_0_1st.playerId=AudioPlayer_Web_Next")
 // 创建场景
 const scene = new THREE.Scene();
 // const gui = new dat.GUI()
@@ -40,7 +41,8 @@ world.gravity.set(0, -9.8, 0)
 // 创建小球
 const sphereShape = new Sphere(1)
 // 设置物体材质
-const sphereWorldMaterial = new Material()
+const sphereWorldMaterial = new Material("sphere")
+
 // 创建物理世界物体
 const sphereBody = new Body({
     shape: sphereShape,
@@ -51,6 +53,44 @@ const sphereBody = new Body({
 
 // 物体添加到物理世界
 world.addBody(sphereBody)
+// 创建击打声音
+
+// 添加碰撞事件
+function HitEvent(e) {
+    const impactStrength = e.contact.getImpactVelocityAlongNormal()
+    console.log(impactStrength)
+    // 重新从0开始
+    if(impactStrength > 2){
+        hitSound.currentTime = 0;
+    }
+    hitSound.play();
+
+}
+
+sphereBody.addEventListener("collide", HitEvent)
+// 创建物理世界地面
+const floorShape = new Plane();
+const floorBody = new Body();
+const floorMaterial = new Material("floor");
+floorBody.material = floorMaterial;
+// 当质量为0的时候，可以使得物体保持不动
+floorBody.mass = 0,
+floorBody.addShape(floorShape),
+
+floorBody.position.set(0, -5, 0);
+// 旋转地面位置
+floorBody.quaternion.setFromAxisAngle(new Vec3(1.0,0), -Math.PI / 2);
+world.addBody(floorBody);
+
+const defaultContactactMaterial = new ContactMaterial(
+    spherematerial,
+    floorMaterial,
+    {
+        friction: 0.1, // 摩擦力
+        restitution: 0.7, // 弹性
+    }
+)
+world.addContactMaterial(defaultContactactMaterial) 
 
 // 添加环境光和平行光
 const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); 
@@ -86,15 +126,19 @@ function render() {
 }
 
 render ()
-// 双击全屏
-window.addEventListener("dblclick", ()=>{
-    const fullScreenElement = document.fullscreenElement;
-    if(!fullScreenElement) {
-        renderer.domElement.requestFullscreen()
-    }else{
-        document.exitFullscreen()
-    }
+window.addEventListener("mousemove", ()=>{
+    // hitSound.play()
+    // console.log("====")
 })
+// 双击全屏
+// window.addEventListener("dblclick", ()=>{ 
+//     const fullScreenElement = document.fullscreenElement;
+//     if(!fullScreenElement) {
+//         renderer.domElement.requestFullscreen()
+//     }else{
+//         document.exitFullscreen()
+//     }
+// })
 // 屏幕自适应
 window.addEventListener("resize",()=>{
     // 更新摄像头
