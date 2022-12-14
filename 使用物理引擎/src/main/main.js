@@ -32,7 +32,6 @@ function createCube(){
     const cube = new THREE.Mesh( cubeGeometry, cubematerial );
     cube.castShadow = true;
     scene.add( cube );
-
     // 创建小球
     const cubeShape = new Box(new Vec3(0.5, 0.5, 0.5))
     // 设置物体材质
