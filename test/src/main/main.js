@@ -16,7 +16,8 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 camera.position.set(0, 0 , 10)
 scene.add(camera)
 
-const texture = new THREE.TextureLoader("Flag_of_the_Republic_of_China.svg.png")
+const textureLoader = new THREE.TextureLoader()
+const texture = textureLoader.load("1.png")
 
 const rawShaderMaterial = new THREE.RawShaderMaterial({
     // 顶点着色器
