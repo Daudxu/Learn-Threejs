@@ -43,8 +43,8 @@ const plane = new THREE.Mesh( geometry, rawShaderMaterial );
 scene.add( plane );
 
 // 坐标轴的对象
-const axesHelper = new THREE.AxesHelper( 6 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 6 );
+// scene.add( axesHelper );
 
 // 渲染
 const renderer = new THREE.WebGLRenderer()
