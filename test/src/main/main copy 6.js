@@ -16,27 +16,16 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 camera.position.set(0, 0 , 10)
 scene.add(camera)
 
-const texture = new THREE.TextureLoader("Flag_of_the_Republic_of_China.svg.png")
-
 const rawShaderMaterial = new THREE.RawShaderMaterial({
     // 顶点着色器
     vertexShader: basicVertexShader,
     // 片元着色器
     fragmentShader:basicFragmentShader,
-    side: THREE.DoubleSide,
-    // wireframe: true,
-    uniforms: {
-        uTime: {
-            value: 0,
-        },
-        uTexture: {
-            value: texture
-        }
-    }
+    side: THREE.DoubleSide
 })
 
 // 平面
-const geometry = new THREE.PlaneGeometry( 1, 1, 64, 64 );
+const geometry = new THREE.PlaneGeometry( 1, 1 );
 // const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
 const plane = new THREE.Mesh( geometry, rawShaderMaterial );
 scene.add( plane );
@@ -54,11 +43,7 @@ document.body.appendChild(renderer.domElement)
 const controls =  new OrbitControls( camera, renderer.domElement );
 controls.enableDamping = true;
 
-const clock = new THREE.Clock();
-
 function render() {
-    const elapsedTime = clock.getElapsedTime();
-    rawShaderMaterial.uniforms.uTime.value = elapsedTime;
     controls.update()
     renderer.render(scene, camera)
     requestAnimationFrame(render)
