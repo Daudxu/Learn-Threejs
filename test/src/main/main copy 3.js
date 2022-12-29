@@ -3,9 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import gsap from 'gsap'
 // import  *  as dat from "dat.gui"
 // 顶点着色器
-import basicVertexShader from "../shader/raw/vertex.glsl";
+import basicVertexShader from "../shader/basic/vertex.glsl";
 // 片元着色器
-import basicFragmentShader from "../shader/raw/fragment.glsl";
+import basicFragmentShader from "../shader/basic/fragment.glsl";
 // 创建场景
 const scene = new THREE.Scene();
 // 创建相机
@@ -16,7 +16,7 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 camera.position.set(0, 0 , 10)
 scene.add(camera)
 
-const rawShaderMaterial = new THREE.RawShaderMaterial({
+const shaderMaterial = new THREE.ShaderMaterial({
     // 顶点着色器
     vertexShader: basicVertexShader,
     // 片元着色器
@@ -26,7 +26,7 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
 // 平面
 const geometry = new THREE.PlaneGeometry( 1, 1 );
 // const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( geometry, rawShaderMaterial );
+const plane = new THREE.Mesh( geometry, shaderMaterial );
 scene.add( plane );
 
 // 坐标轴的对象
