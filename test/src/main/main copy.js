@@ -9,40 +9,34 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 // 设置相机位置
-camera.position.set(0, 0 , 10)
+camera.position.set(0, 0, 10)
 scene.add(camera)
 
-const shaderMaterial = new THREE.ShaderMaterial({
-    // 顶点着色器
-    vertexShader: `
-        void main() {
-            gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1);
-        }
-    `,
-    // 片元着色器
-    fragmentShader: `
-       void main() {
-          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-       }
-    `
-})
+//Create a closed wavey loop
+const curve = new THREE.CatmullRomCurve3([
+	new THREE.Vector3( -10, 0, 0 ),
+	new THREE.Vector3( -5, 0, 0 ),
+	new THREE.Vector3( 0, 2, 0 ),
+	new THREE.Vector3( 5, 0, 0 ),
+	new THREE.Vector3( 10, 0, 0 )
+] );
 
-// 平面
-const geometry = new THREE.PlaneGeometry( 1, 1 );
-// const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( geometry, shaderMaterial );
-scene.add( plane );
+const points = curve.getPoints( 50 );
+const geometry = new THREE.BufferGeometry().setFromPoints( points );
 
+const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+
+// Create the final object to add to the scene
+const curveObject = new THREE.Line( geometry, material );
+scene.add(curveObject)
 // 坐标轴的对象
-const axesHelper = new THREE.AxesHelper( 6 );
+const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
-
 // 渲染
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(width, height)
 document.body.appendChild(renderer.domElement)
-
-// 控制器
+// 控制
 const controls =  new OrbitControls( camera, renderer.domElement );
 controls.enableDamping = true;
 
@@ -53,7 +47,6 @@ function render() {
 }
 
 render ()
-
 // 双击全屏
 window.addEventListener("dblclick", ()=>{
     const fullScreenElement = document.fullscreenElement;
@@ -65,7 +58,7 @@ window.addEventListener("dblclick", ()=>{
 })
 
 // 屏幕自适应
-window.addEventListener("resize",() => {
+window.addEventListener("resize",()=>{
     // 更新摄像头
     camera.aspect = window.innerWidth / window.innerHeight;
     // 更新摄像机的投影矩阵 
