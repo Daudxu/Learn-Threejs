@@ -20,8 +20,7 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
     // 顶点着色器
     vertexShader: basicVertexShader,
     // 片元着色器
-    fragmentShader:basicFragmentShader,
-    side: THREE.DoubleSide
+    fragmentShader:basicFragmentShader
 })
 
 // 平面
