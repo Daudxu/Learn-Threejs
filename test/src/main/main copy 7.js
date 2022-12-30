@@ -3,15 +3,15 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import gsap from 'gsap'
 // import  *  as dat from "dat.gui"
 // 顶点着色器
-import deepVertexShader from "../shader/deep/vertex.glsl";
+import basicVertexShader from "../shader/raw/vertex.glsl";
 // 片元着色器
-import deepFragmentShader from "../shader/deep/fragment.glsl";
+import basicFragmentShader from "../shader/raw/fragment.glsl";
 // 创建场景
 const scene = new THREE.Scene();
 // 创建相机
 const width = window.innerWidth;
 const height = window.innerHeight;
-const camera = new THREE.PerspectiveCamera(15, width/height, 0.1, 1000)
+const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
 // 设置相机位置
 camera.position.set(0, 0 , 10)
 scene.add(camera)
@@ -21,9 +21,9 @@ const texture = textureLoader.load("1.png")
 
 const rawShaderMaterial = new THREE.RawShaderMaterial({
     // 顶点着色器
-    vertexShader: deepVertexShader,
+    vertexShader: basicVertexShader,
     // 片元着色器
-    fragmentShader:deepFragmentShader,
+    fragmentShader:basicFragmentShader,
     side: THREE.DoubleSide,
     // wireframe: true,
     uniforms: {
