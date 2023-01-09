@@ -3,9 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import gsap from 'gsap'
 // import  *  as dat from "dat.gui"
 // 顶点着色器
-import deepVertexShader from "../shader/deep/vertex.glsl";
+import deepVertexShader from "../shaders/flylight/vertex.glsl";
 // 片元着色器
-import deepFragmentShader from "../shader/deep/fragment.glsl";
+import deepFragmentShader from "../shaders/flylight/fragment.glsl";
 // 创建场景
 const scene = new THREE.Scene();
 // 创建相机
@@ -23,7 +23,7 @@ const rawShaderMaterial = new THREE.RawShaderMaterial({
     // 顶点着色器
     vertexShader: deepVertexShader,
     // 片元着色器
-    fragmentShader:deepFragmentShader,
+    fragmentShader: deepFragmentShader,
     side: THREE.DoubleSide,
     // wireframe: true,
     uniforms: {
