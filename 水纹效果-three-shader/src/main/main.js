@@ -39,17 +39,6 @@ scene.add(camera);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-// const water = new Water(new THREE.PlaneBufferGeometry(1, 1, 1024, 1024), {
-//   color: "#ffffff",
-//   scale: 1,
-//   flowDirection: new THREE.Vector2(1, 1),
-//   textureHeight: 1024,
-//   textureWidth: 1024,
-// });
-// water.rotation.x = -Math.PI / 2;
-
-// scene.add(water);
-
 // 加载场景背景
 const rgbeLoader = new RGBELoader();
 rgbeLoader.loadAsync("./assets/050.hdr").then((texture) => {
