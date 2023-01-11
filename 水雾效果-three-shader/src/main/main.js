@@ -5,11 +5,10 @@ import  *  as dat from "dat.gui"
 
 const gui = new dat.GUI();
 // 顶点着色器
-import vertexShader from "../shaders/flylight/vertex.glsl";
+import vertexShader from "../shaders/water/vertex.glsl";
 // 片元着色器
-import fragmentShader from "../shaders/flylight/fragment.glsl";
+import fragmentShader from "../shaders/water/fragment.glsl";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 // 创建场景
 const scene = new THREE.Scene();
 // 创建相机
@@ -39,50 +38,24 @@ scene.add(camera)
 
 const shaderMaterial = new THREE.RawShaderMaterial({
     vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
+    fragmentShader: fragmentShader, 
     uniforms: {},
     side: THREE.DoubleSide,
     // transparent: true,
 })
 
-const gltfLoader = new GLTFLoader();
-let LightBox = null;
-gltfLoader.load("./assets/model/flyLight.glb", (gltf) => {
-//   scene.add(gltf.scene);
-  LightBox = gltf.scene.children[1];
-  LightBox.material = shaderMaterial;
-  for (let i = 0; i < 150; i++) {
-    let flyLight = gltf.scene.clone(true);
-    let x = (Math.random() - 0.5) * 300;
-    let z = (Math.random() - 0.5) * 300;
-    let y = Math.random() * 60 + 25;
-    flyLight.position.set(x, y, z);
-    gsap.to(flyLight.rotation, {
-        y: 2 * Math.PI,
-        duration: 10 + Math.random() * 30,
-        repeat: -1,
-    });
-    gsap.to(flyLight.position, {
-        x: "+=" + Math.random() * 5,
-        y: "+=" + Math.random() * 10,
-        yoyo: true,
-        duration: 5 + Math.random() * 10,
-        repeat: -1,
-    });
-    scene.add(flyLight);
-  }
-});
-
-
 // // 平面
-// const geometry = new THREE.PlaneGeometry( 1, 1, 64, 64 );
-// // const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-// const plane = new THREE.Mesh( geometry, rawShaderMaterial );
-// scene.add( plane );
+const geometry = new THREE.PlaneGeometry( 1, 1, 64, 64 );
+// const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+const plane = new THREE.Mesh( geometry, shaderMaterial );
+plane.rotation.x = -Math.PI / 2;
+scene.add( plane );
 
 // 坐标轴的对象
-// const axesHelper = new THREE.AxesHelper( 6 );
-// scene.add( axesHelper );
+const axesHelper = new THREE.AxesHelper( 6 );
+scene.add( axesHelper );
+
+
 
 // 渲染
 const renderer = new THREE.WebGLRenderer()
@@ -104,15 +77,12 @@ document.body.appendChild(renderer.domElement)
 const controls =  new OrbitControls( camera, renderer.domElement );
 controls.enableDamping = true;
 // 设置自动旋转
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.1;
-controls.maxPolarAngle = (Math.PI / 3) * 2;
-controls.minPolarAngle = (Math.PI / 3) * 2;
-// const clock = new THREE.Clock();
+// controls.autoRotate = true;
+// controls.autoRotateSpeed = 0.1;
+// controls.maxPolarAngle = (Math.PI / 3) * 2;
+// controls.minPolarAngle = (Math.PI / 3) * 2;
 
 function render() {
-    // const elapsedTime = clock.getElapsedTime();
-    // rawShaderMaterial.uniforms.uTime.value = elapsedTime;
     controls.update()
     renderer.render(scene, camera)
     requestAnimationFrame(render)
