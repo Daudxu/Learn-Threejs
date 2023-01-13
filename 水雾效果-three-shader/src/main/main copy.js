@@ -14,6 +14,7 @@ const scene = new THREE.Scene();
 // 创建相机
 const width = window.innerWidth;
 const height = window.innerHeight;
+
 const camera = new THREE.PerspectiveCamera(
     90,
     window.innerHeight / window.innerHeight,

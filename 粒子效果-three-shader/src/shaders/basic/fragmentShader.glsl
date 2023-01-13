@@ -34,8 +34,5 @@ void main(){
        textureColor = texture2D(uTexture2,gl_PointCoord);
     }
     
-
     gl_FragColor = vec4(vColor,textureColor.r) ;
-    
- 
 }

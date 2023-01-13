@@ -73,10 +73,10 @@ let  points=null;
 
 // 设置星系的参数
 const params = {
-  count: 1000,
+  count: 100000,
   size: 0.1,
-  radius: 5,
-  branches: 4,
+  radius: 15,
+  branches: 360,
   spin: 0.5,
   color: "#ff6030",
   outColor: "#1b3984",
