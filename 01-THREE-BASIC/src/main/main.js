@@ -15,3 +15,4 @@ const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 2000)
 // 设置相机位置
 camera.position.set(0, 0, 10)
 scene.add(camera)
+
