@@ -19,6 +19,7 @@ export default defineComponent({
 </script>
 <template>
   <div class="hello-wrap">
+    <p>home</p>
     <!-- <button type="button" @click="addAcountVuex">count is: {{ $store.state.appStore.countVuex }}</button> -->
   </div>
 </template>
