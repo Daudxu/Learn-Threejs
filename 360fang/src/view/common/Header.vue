@@ -9,12 +9,17 @@ const count = ref(0)
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
+  <!-- <h1>{{ msg }}</h1> -->
+<!-- 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
-  </div>
+  </div> -->
   <p class="read-the-docs">Header</p>
+  <Teleport to="html">
+      <div>
+        <h1>弹窗</h1>
+      </div>
+  </Teleport>
 </template>
 
 <style scoped>
