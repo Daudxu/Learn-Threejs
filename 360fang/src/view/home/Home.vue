@@ -1,5 +1,5 @@
 <script >
-import { defineComponent,defineAsyncComponent,version, customRef } from "vue";
+import { defineComponent,defineAsyncComponent,version, customRef, reactive, toRaw, toRefs, markRaw } from "vue";
 import { useStore } from 'vuex';
 const Header = defineAsyncComponent(()=>import("../common/Header.vue"))
 const Footer = defineAsyncComponent(()=>import("../common/Footer.vue"))
@@ -12,6 +12,22 @@ export default defineComponent({
       console.log("store", store.state.appStore)
       store.commit('ADD_ACOUNTVUEX', store.state.appStore.countVuex + 1);
     }
+    let person = reactive({
+        name:"张三",
+        age: 18
+    })
+
+    function showRawPerson(){
+      const p = toRaw(person)
+      p.age++
+      console.log(p)
+    }
+    function addCar(){
+      let car = {name:"奔驰", price:40}
+      person.car = markRaw(car)
+      console.log(person)
+    }
+    // showRawPerson()
     function myRef(value) {
       let timer
       return customRef((track, trigger) => {
@@ -35,7 +51,11 @@ export default defineComponent({
     return {
       addAcountVuex,
       $store: store,
-      keyWord
+      keyWord,
+      person,
+      ...toRefs(person),
+      showRawPerson,
+      addCar
     };
   },
   components:{Header,Footer}
@@ -57,7 +77,8 @@ export default defineComponent({
     <p>home</p>
     <input type="text" v-model="keyWord">
     <p>{{keyWord}}</p>
-   
+   <button @click="showRawPerson">age++</button>
+   <button @click="addCar">add car</button>
     <button type="button" @click="addAcountVuex">count is: {{ $store.state.appStore.countVuex }}</button>
   </div>
 </template>
