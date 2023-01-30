@@ -16,7 +16,7 @@ export default defineComponent({
         name:"张三",
         age: 18
     })
-
+    
     function showRawPerson(){
       const p = toRaw(person)
       p.age++
