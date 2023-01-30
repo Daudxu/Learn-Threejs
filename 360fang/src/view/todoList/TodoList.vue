@@ -1,28 +1,14 @@
 <script setup>
-import { ref, onMounted, onUpdated  } from 'vue'
+import { ref, onMounted, onUpdated, onUnmounted  } from 'vue'
+import Web3 from 'web3'
+import usePoint from '../../hooks/usePoint'
 
-const el = ref()
 const count = ref(0)
-let intervalId
-
-onMounted(() => {
-  console.log("onMounted")
-  intervalId = setInterval(() => {
-     console.log(111)
-  })
-})
-
-onUpdated(() => {
-//   console.log(document.getElementById('count').textContent)
-  console.log(count.value)
-})
-
-onUnmounted(() => clearInterval(intervalId))
-
+let point = usePoint();
 
 </script>
 
 <template>
-  <div ref="el"></div>
   <button id="count" @click="count++">{{ count }}</button>
+  <h1>X: {{point.x}} ------ Y: {{ point.y }}</h1>
 </template>
