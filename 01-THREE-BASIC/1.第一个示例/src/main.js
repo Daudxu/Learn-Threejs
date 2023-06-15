@@ -10,3 +10,10 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+ // 渲染
+ function render() {
+    renderer.render(scene, camera)
+    requestAnimationFrame(render)
+  }
+
+  requestAnimationFrame(render)
